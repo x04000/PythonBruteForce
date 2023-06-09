@@ -2,10 +2,7 @@ import random
 from getpass import getpass
 import string
 
-o4 = 0
-
-try:
-    print("""\x1b[1;31m
+print("""\x1b[1;31m
 ▄▄▄▄    ██▀███   █    ██ ▄▄▄█████▓▓█████      █████▒▒█████   ██▀███   ▄████▄  ▓█████ 
 ▓█████▄ ▓██ ▒ ██▒ ██  ▓██▒▓  ██▒ ▓▒▓█   ▀    ▓██   ▒▒██▒  ██▒▓██ ▒ ██▒▒██▀ ▀█  ▓█   ▀ 
 ▒██▒ ▄██▓██ ░▄█ ▒▓██  ▒██░▒ ▓██░ ▒░▒███      ▒████ ░▒██░  ██▒▓██ ░▄█ ▒▒▓█    ▄ ▒███   
@@ -15,59 +12,47 @@ try:
 ▒░▒   ░   ░▒ ░ ▒░░░▒░ ░ ░     ░     ░ ░  ░    ░       ░ ▒ ▒░   ░▒ ░ ▒░  ░  ▒    ░ ░  ░
 ░    ░   ░░   ░  ░░░ ░ ░   ░         ░       ░ ░   ░ ░ ░ ▒    ░░   ░ ░           ░   
 ░         ░        ░                 ░  ░              ░ ░     ░     ░ ░         ░  ░
-    ░                                                               ░               
+░                                                               ░               
 \x1b[0;31m#################################################################
-                           \x1b[0;34mBy x04000
-                    \x1b[0;33mGithub: github.com/x04000
-                          \x1b[0;32mBase: Python
-                          \x1b[0;36mVersion: 1.0
+                       \x1b[0;34mBy x04000
+                \x1b[0;33mGithub: github.com/x04000
+                      \x1b[0;32mBase: Python
+                      \x1b[0;36mVersion: 1.0
 \x1b[0;31m#################################################################
 \x1b[1;34m
-    """)
+""")
 
-    option = str(input("Do you want include all chars? [Y/n] "))
-    print("")
+option = input("Do you want include all chars? [y/N] ").lower()
+print()
 
-    if option == "Y":
-        chars = string.printable
-        chars_list = list(chars)
+char_list = ""
 
-    else:
-        o1=1
-        o2=1
-        o3=1
-        option = str(input("Do you want include lowercase? [Y/n] "))
-        if option == "Y":
-            o1 = 4
-        option = str(input("Do you want include uppercase? [Y/n] "))
-        if option == "Y":
-            o2 = 5
-        option = str(input("Do you want include numbers? [Y/n] "))
-        if option == "Y":
-            o3 = 6
-        o4 = o1+o2+o3
-        if o4 == 6:
-            chars = "abcdefghijklmnopqrstuvwxyz"
-        if o4 == 7:
-            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        if o4 == 8:
-            chars = "0123456789"
-        if o4 == 10:
-            chars = "abcdefghijqlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        if o4 == 11:
-            chars = "abcdefghijqlmnopqrstuvwxyz0123456789"
-        if o4 == 15:
-            chars = "abcdefghijqlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        chars_list = list(chars)
-            
+if option == "y":
+    chars_list = list(string.printable)
+else:
+    options = (string.ascii_lowercase, string.ascii_uppercase, string.digits)
+    print("""
+Choose the character sets you want to use. Separate each index by commas (","). For example: 1,3
+1) Lowercase
+2) Uppercase
+3) Digits
+          """)
+    chosen = input("-> ").split(",")
+    for i in chosen:
+        try:
+            char_list += options[int(i)-1]
+        except TypeError:
+            print("Invalid value. Terminating program...")
+            exit(1)
+        
+password = getpass("Password: ")
 
-    password = getpass("Password: ")
+num = 0
+guess_password = ""
 
-    num = 0
-    guess_password = ""
-
+try:
     while(guess_password != password):
-        guess_password = random.choices(chars_list, k=len(password))
+        guess_password = random.choices(char_list, k=len(password))
 
         print("Attemp: "+str(num)+" | Checking "+str(guess_password))
 
@@ -79,8 +64,5 @@ try:
             break
 
         num = num + 1
-except:
-    if o4 == 3:
-        print("\x1b[0;31m[\x1b[0;36m!\x1b[0;31m] Invalid values\x1b[1;34m")
-        exit()
-    print("\n\x1b[0;31m[\x1b[0;36m!\x1b[0;31m] Keyboard interrupt\x1b[1;34m")
+except KeyboardInterrupt:
+    print("Terminating Program...")
