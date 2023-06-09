@@ -22,12 +22,12 @@ print("""\x1b[1;31m
 \x1b[1;34m
 """)
 
-option = str(input("Do you want include all chars? [Y/n] "))
+option = input("Do you want include all chars? [y/N] ").lower()
 print()
 
 char_list = ""
 
-if option == "Y":
+if option == "y":
     chars_list = list(string.printable)
 else:
     options = (string.ascii_lowercase, string.ascii_uppercase, string.digits)
